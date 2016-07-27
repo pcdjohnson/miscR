@@ -1,0 +1,2 @@
+# miscR
+Miscellaneous R functions
