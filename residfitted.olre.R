@@ -44,7 +44,7 @@ residfitted.olre <-
 # function to make an x-y scatter plot and add a LOESS line
 
 plot.loess <-
-  function(x, y = NULL, ...)
+  function(x, y = NULL, loess.col = "red", ...)
   {
     if(is.data.frame(x) && ncol(x) == 2) {
       plot.data <- x
@@ -58,7 +58,7 @@ plot.loess <-
     plot.data <- plot.data[order(plot.data$x), ]
     plot(plot.data[,c("x", "y")], xlab = xy.labels[1], ylab = xy.labels[2], ...)
     abline(h = 0)
-    points(plot.data[,c("x", "loess.line")], type="l", col="red")
+    points(plot.data[,c("x", "loess.line")], type = "l", col = loess.col)
   }
 
 
