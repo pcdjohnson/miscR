@@ -2,14 +2,14 @@
 # University of Glasgow
 # 27 July 2016
 
-# R function to output Pearson residuals and fitted values from
+# R function to output "corrected" Pearson residuals and fitted values from
 # a Poisson-lognormal GLMM (i.e. a Poisson GLMM with an observation-level 
 # random effect or OLRE) model object fitted using lme4::glmer.
 # The usual method of residuals and fitted values using the functions stats::residuals 
 # and stats::fitted treat the OLRE as a random effect rather than part of the 
 # Poisson-lognormal error distribution. This is problematic when using a Pearson 
-# residuals v fitted values plot to assess the fit of the model, using e.g. the plot.merMod
-# method for plot (see examples). Further justification here:
+# residuals v fitted values plot to assess the fit of the model (see examples).
+# Further justification here:
 # https://stat.ethz.ch/pipermail/r-sig-mixed-models/2013q3/020770.html
 # The function is adapted from a function I wrote on the same thread:
 # https://stat.ethz.ch/pipermail/r-sig-mixed-models/2013q3/020817.html
@@ -17,7 +17,7 @@
 # Value: returns a data frame with the columns "Fitted" and "PearsonResiduals"
 
 residfitted.olre <- 
-  function(object) {
+  function(object, warn = TRUE) {
     require(AICcmodavg)
     require(lme4)
     response<-model.frame(object)[[1]]
@@ -28,15 +28,14 @@ residfitted.olre <-
     pois.log.norm <-
       length(od.term) == 1 && fam.link.mer(object)$family == "poisson" && fam.link.mer(object)$link == "log"
     if(!pois.log.norm) {
-      warning("Fitted model is not Poisson-lognormal. Using stats::residuals and stats::fitted.")
+      if(warn) warning("Fitted model is not Poisson-lognormal. Using stats::residuals and stats::fitted.")
       f <- fitted(object)
       r <- residuals(object, type = "pearson")
     } 
     if(pois.log.norm) {
       od.ranef <- re[[od.term]][[1]]
       f <- exp(log(fitted(object)) - od.ranef)
-      r <- 
-        (response - f) / sqrt(f + (f^2) * c(exp(lme4::VarCorr(object)[[od.term]]) - 1))
+      r <- (response - f) / sqrt(f + (f^2) * c(exp(lme4::VarCorr(object)[[od.term]]) - 1))
     }
     return(data.frame(Fitted = f, PearsonResiduals = r))
   }
@@ -89,7 +88,7 @@ if(F) {
   residfitted.olre(fit.nb)
   residfitted.olre(fit.poisln)
   # if the model isn't a Poisson-lognormal GLMM the standard stats functions are used 
-  # with a warning.
+  # with an optional warning.
 
   # both the Poisson-lognormal and the NB fit much better than the Poisson,
   # and the NB fits slightly better than the Poisson-lognormal  
@@ -119,6 +118,5 @@ if(F) {
   # look very similar, which isn't surprising because each is a Poisson distribution 
   # with added (really mutliplied) gamma- and lognormal-distributed noise 
   # respectively, and gamma and lognormal distributions can be quite similar.
-
 
 }
