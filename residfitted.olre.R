@@ -54,9 +54,9 @@ plot.loess <-
       plot.data <- data.frame(x = x, y = y)
       xy.labels <- names(plot.data)
     } 
-    plot.data$loess.line <- predict(loess(y ~ x, data = plot.data, ...))
+    plot.data$loess.line <- predict(loess(y ~ x, data = plot.data))
     plot.data <- plot.data[order(plot.data$x), ]
-    plot(plot.data[,c("x", "y")], xlab = xy.labels[1], ylab = xy.labels[2])
+    plot(plot.data[,c("x", "y")], xlab = xy.labels[1], ylab = xy.labels[2], ...)
     abline(h = 0)
     points(plot.data[,c("x", "loess.line")], type="l", col="red")
   }
