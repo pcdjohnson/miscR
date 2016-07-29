@@ -68,6 +68,7 @@ if(F) {
 
   library(lme4)    
   library(glmmADMB)
+  library(AICcmodavg)
   
   # fit three models to the grouse ticks count data (see ?grouseticks)
   # first, a Poisson GLMM that doesn't account for overdispersion
