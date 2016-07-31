@@ -16,6 +16,19 @@
 
 # works on lme4 model objects, not tested on others yet.
 
+# required packages
+library(lme4)    
+library(AICcmodavg)
+  
+# the function requires two other functions from here:
+# https://raw.githubusercontent.com/pcdjohnson/miscR/master/residfitted.olre.R
+library(RCurl)
+options(RCurlOptions=list(cainfo=system.file("CurlSSL","cacert.pem",package="RCurl")))
+eval(expr=parse(text=getURL("https://raw.githubusercontent.com/pcdjohnson/miscR/master/residfitted.olre.R")))
+# if the above 3 lines don't work then just paste the functions at the URL above into your script
+  
+# function:
+
 sim.residplot <- 
   function(object, add.sim.resid = TRUE) {
     require(lme4)
@@ -50,20 +63,7 @@ sim.residplot <-
 # EXAMPLES
 
 if(F) {
-  
-  # required packages
-  library(RCurl)
-  library(lme4)    
-  library(AICcmodavg)
-  
-  # the function requires two other functions from here:
-  # https://raw.githubusercontent.com/pcdjohnson/miscR/master/residfitted.olre.R
-  options(RCurlOptions=list(cainfo=system.file("CurlSSL","cacert.pem",package="RCurl")))
-  eval(expr=parse(text=getURL("https://raw.githubusercontent.com/pcdjohnson/miscR/master/residfitted.olre.R")))
-  # if the above 2 lines don't work then just paste the functions at the URL above into your script
-  
-  # examples
-  
+
   # fit a Poisson-lognormal GLMM (a Poisson GLMM with an 
   # observation-level random effect [OLRE])
   # to the grouseticks data (see ?grouseticks)
