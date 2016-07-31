@@ -36,7 +36,13 @@ sim.residplot <-
       xy <- xy[order(xy$Fitted.sim), ]
       points(xy[,c("Fitted.sim", "PearsonResiduals.sim")], pch = 3, col = 2)
       lines(xy[,c("Fitted.sim", "loess.line.sim")], type = "l", col = 2)
-      legend("topright", legend = c("Real", "Simulated"), pch = c(1, 3), col = 1:2, bty = "n")
+      y.all <- unlist(xy[, grep("Residuals", names(xy))])
+      x.all <- unlist(xy[, grep("Fitted", names(xy))])
+      y <- y.all[y.all > (max(y.all) * 2/3)]
+      x <- x.all[y.all > (max(y.all) * 2/3)]
+      leg.breaks <- c(-Inf, min(x.all) + diff(range(x.all)) * c(1, 2)/3, Inf)
+      leg.pos <- c("topleft", "top", "topright")[which.min(table(cut(x, leg.breaks)))]
+      legend(leg.pos, legend = c("Real", "Simulated"), pch = c(1, 3), col = 1:2, bty = "n")
     }
   }
 
@@ -124,6 +130,7 @@ if(F) {
   # are violated here.
   
   # try comparing with a simulated (and perfectly fitting) model
+  sim.residplot(fit.gauss, add.sim.resid = FALSE)
   sim.residplot(fit.gauss)
   # remember to repeat the plot a few times to get an idea of the influence
   # of sampling error.
@@ -162,7 +169,7 @@ if(F) {
   # the advantage of simulating from the model is that we don't have to get rid 
   # of this trend. if the trend is a sign of poor fit, it won't appear in
   # the simulated scatter plot...
-  sim.residplot(gm2)
-  # ...but it does, so suggesting that the residuals isn't showing signs of poor fit.
+  sim.residplot(gm2) # repeat a few times
+  # ...but it does, so suggesting that the residuals aren't showing signs of poor fit.
   
 }
