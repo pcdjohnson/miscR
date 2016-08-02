@@ -1,11 +1,9 @@
 # miscR
-Miscellaneous R functions
+## Miscellaneous R functions
 
-These functions can be sourced within R with the following lines, after replacing "************" with the function name:
+These functions are now available as an R package, [GLMMmisc](https://github.com/pcdjohnson/GLMMmisc "GLMMmisc R package"):
+https://github.com/pcdjohnson/GLMMmisc
 
-library(RCurl)
+I'll leave the old versions here but I strongly recommend using the up-to-date versions in the GLMMmisc package, 
 
-options(RCurlOptions=list(cainfo=system.file("CurlSSL","cacert.pem",package="RCurl")))
-eval(expr=parse(text=getURL("https://raw.githubusercontent.com/pcdjohnson/miscR/master/************.R")))
 
-At some point I'll get round to uploading them as a package
